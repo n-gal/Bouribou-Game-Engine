@@ -3,60 +3,12 @@
 #include <iostream>
 #include <random>
 #include <Windows.h>
-#include "shader.h"
+#include "Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void drawTitle();
 void setupCMDWindowParams();
-
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\n\0";
-
-const char* vertexColourVertexShaderSource
-= "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"out vec4 VertColour;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"   VertColour = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
-"}\0";
-
-const char* vertexColourfragmentShaderSource = "#version 330 core\n"
-"in vec4 VertColour;\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(VertColour.x, VertColour.y, VertColour.z, 1.0f);\n"
-"}\n\0";
-
-const char* movingVertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"uniform vec4 VerticeTimeMultiplier;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y * VerticeTimeMultiplier.y, aPos.z, 1.0);\n"
-"}\0";
-
-const char* movingFragmentShaderSource = "#version 330 core\n"
-"uniform vec4 NewColour;\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = NewColour;\n"
-"}\n\0";
 
 const char* definedColourVertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -106,11 +58,11 @@ int main()
         return -1;
     }
 
+
+
     //-------------------------------------------------------------
     // Set up vertex data
     //-------------------------------------------------------------
-
-    
     float vertices[] = {
          0.5f,  0.5f, 0.0f,  // top right
          0.5f, -0.5f, 0.0f,  // bottom right
@@ -130,6 +82,7 @@ int main()
          0.0f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f    // top 
     };
     */
+
 
 
     //-------------------------------------------------------------
@@ -152,11 +105,10 @@ int main()
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
 
+
     //-------------------------------------------------------------
     // Set up how vertex data is read
     //-------------------------------------------------------------
-
-    
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     
@@ -169,10 +121,20 @@ int main()
     glEnableVertexAttribArray(1);
     */
 
+
+
+    //-------------------------------------------------------------
+    // Create the shaders
+    //-------------------------------------------------------------
+    Shader VertexColorShader("VertexColorVertexShader.glsl", "VertexColorFragmentShader.glsl");
+    Shader BaseShader("BaseVertexShader.glsl", "BaseFragmentShader.glsl");
+    Shader MovingShader("MovingVertexShader.glsl", "MovingFragmentShader.glsl");
+
+
+
     //-------------------------------------------------------------
     // Frame Loop
     //-------------------------------------------------------------
-    Shader BaseShader("BaseVertexShader.glsl", "BaseFragmentShader.glsl");
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
@@ -180,21 +142,15 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //glUseProgram(shaderProgram);
-
-        /*
+        MovingShader.use();
+        
         float timeValue = glfwGetTime();
         float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-        float blueValue = (sin(timeValue) / 3.0f) + 0.5f;
-        float vertValue = (sin(timeValue));
-        int vertexPositionLocation = glGetUniformLocation(shaderProgram, "VerticeTimeMultiplier");
-        int vertexColorLocation = glGetUniformLocation(shaderProgram, "NewColour");
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-        glUniform4f(vertexPositionLocation, 0.0f, vertValue, 0.0f, 1.0f);
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-        */
+        float vertValue = (sin(timeValue * 20));
 
-        BaseShader.use();
+        MovingShader.set4Float("VerticeTimeMultiplier", 0.0f, vertValue, 0.0f, 1.0f);
+        MovingShader.set4Float("NewColor", 0.0f, greenValue, 0.0f, 1.0f);
+
         glBindVertexArray(VAO);
         //glDrawArrays(GL_TRIANGLES, 0, 3);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
