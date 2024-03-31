@@ -21,7 +21,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Test.cpp">
+    <ClCompile Include="Engine.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
@@ -40,6 +40,9 @@
     <Text Include="BaseFragmentShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </Text>
+    <Text Include="DefinedColorVertexShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="BaseVertexShader.glsl">
@@ -55,6 +58,9 @@
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
     <None Include="MovingFragmentShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="DefinedColorFragmentShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
   </ItemGroup>

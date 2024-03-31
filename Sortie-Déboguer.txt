@@ -1,0 +1,105 @@
+﻿'OpenGLProject1.exe' (Win32) : Chargé 'C:\Users\galni\source\repos\OpenGLProject1\x64\Release\OpenGLProject1.exe'. Les symboles ont été chargés.
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\ntdll.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\kernel32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\KernelBase.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\user32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\win32u.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\gdi32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\gdi32full.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\msvcp_win.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\ucrtbase.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\shell32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\msvcp140.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\vcruntime140.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\vcruntime140_1.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\imm32.dll'. 
+Le thread 0xe7d0 s'est arrêté avec le code 0 (0x0).
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\dinput8.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\msvcrt.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\advapi32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\sechost.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\rpcrt4.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\bcrypt.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\XInput1_4.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\combase.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\cfgmgr32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\devobj.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\dwmapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\InputHost.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\SHCore.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\CoreMessaging.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\oleaut32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\ws2_32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\propsys.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\WinTypes.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\bcryptprimitives.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\CoreUIComponents.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\ntmarta.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\kernel.appcore.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\kernel.appcore.dll'. 
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\kernel.appcore.dll'
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\uxtheme.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\msctf.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\opengl32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\glu32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\clbcatq.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\AppXDeploymentClient.dll'. 
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\AppXDeploymentClient.dll'
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_866484083fc526af\nvoglv64.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\setupapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\ole32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\wtsapi32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\version.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\msasn1.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\cryptnet.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\crypt32.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\drvstore.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\wldp.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\cryptbase.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\wintrust.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\imagehlp.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\cryptsp.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\rsaenh.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\gpapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\profapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_866484083fc526af\nvgpucomp64.dll'. 
+Le thread 0xe38c s'est arrêté avec le code 0 (0x0).
+Le thread 0xb11c s'est arrêté avec le code 0 (0x0).
+Le thread 0x110a8 s'est arrêté avec le code 0 (0x0).
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\windows.storage.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\shlwapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\DXCore.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\nvspcap64.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\psapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\dbghelp.dll'. 
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\psapi.dll'
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\dbghelp.dll'
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\psapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\dbghelp.dll'. 
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\psapi.dll'
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\dbghelp.dll'
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\psapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\dbghelp.dll'. 
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\psapi.dll'
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\dbghelp.dll'
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\psapi.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\dbghelp.dll'. 
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\psapi.dll'
+'OpenGLProject1.exe' (Win32) : Déchargé 'C:\Windows\System32\dbghelp.dll'
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\powrprof.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\umpdc.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\winsta.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\TextInputFramework.dll'. 
+'OpenGLProject1.exe' (Win32) : Chargé 'C:\Windows\System32\oleacc.dll'. 
+Le thread 0x3ad4 s'est arrêté avec le code 0 (0x0).
+Le thread 0xa0fc s'est arrêté avec le code 0 (0x0).
+Le thread 0x70f8 s'est arrêté avec le code 0 (0x0).
+Le thread 0x11378 s'est arrêté avec le code 0 (0x0).
+Le thread 0xfaec s'est arrêté avec le code 0 (0x0).
+Le thread 0x11430 s'est arrêté avec le code 0 (0x0).
+Le thread 0x10c7c s'est arrêté avec le code 0 (0x0).
+Le thread 0x9ca8 s'est arrêté avec le code 0 (0x0).
+Le thread 0xf858 s'est arrêté avec le code 0 (0x0).
+Le thread 0xa440 s'est arrêté avec le code 0 (0x0).
+Le thread 0xe374 s'est arrêté avec le code 0 (0x0).
+Le programme '[62060] OpenGLProject1.exe' s'est arrêté avec le code 0 (0x0).
