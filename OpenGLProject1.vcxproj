@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="BaseTexturedVertexShader.glsl" />
     <None Include="DefinedColorFragmentShader.glsl" />
     <None Include="MovingFragmentShader.glsl" />
     <None Include="MovingVertexShader.glsl" />
@@ -157,15 +158,20 @@
     <Text Include="DefinedColorVertexShader.glsl">
       <FileType>Document</FileType>
     </Text>
+    <Text Include="BaseTexturedFragmentShader.glsl">
+      <FileType>Document</FileType>
+    </Text>
     <ClCompile Include="glad.c" />
     <None Include="BaseVertexShader.glsl">
       <FileType>Document</FileType>
     </None>
+    <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

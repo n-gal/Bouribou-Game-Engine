@@ -30,10 +30,16 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Fichiers sources\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="ImageLoader.cpp">
+      <Filter>Fichiers sources\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
       <Filter>Fichiers sources\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Fichiers de ressources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +47,9 @@
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </Text>
     <Text Include="DefinedColorVertexShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </Text>
+    <Text Include="BaseTexturedFragmentShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </Text>
   </ItemGroup>
@@ -61,6 +70,9 @@
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
     <None Include="DefinedColorFragmentShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="BaseTexturedVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
   </ItemGroup>
