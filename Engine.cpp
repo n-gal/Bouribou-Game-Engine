@@ -59,15 +59,72 @@ int main()
         -0.5f,  0.5f, 0.0f   // top left
     };
     float texturedRectangleVertices[] = {
+        // Front face
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.0f, 1.0f    // top left 
+        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 0.0f,   // bottom left
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 0.0f,   // bottom right
+         0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,   1.0f, 1.0f,   // top right
+        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
+
+        // Right face
+        // positions          // colors           // texture coords
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+         0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,   0.0f, 1.0f,   // top left
+
+        // Back face
+        // positions          // colors           // texture coords
+        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
+
+        // Left face
+        // positions          // colors           // texture coords
+        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
+        -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
+
+        // Top face
+        // positions          // colors           // texture coords
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
+         0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
+
+        // Bottom face
+        // positions          // colors           // texture coords
+        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
+        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
     };
-    unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
+    unsigned int indices[] = {
+        // Front face
+        0, 1, 2,  // first triangle
+        0, 2, 3,  // second triangle
+
+        // Right face
+        4, 5, 6,  // first triangle
+        4, 6, 7,  // second triangle
+
+        // Back face
+        8, 9, 10, // first triangle
+        8, 10, 11,// second triangle
+
+        // Left face
+        12, 13, 14, // first triangle
+        12, 14, 15, // second triangle
+
+        // Top face
+        16, 17, 18, // first triangle
+        16, 18, 19, // second triangle
+
+        // Bottom face
+        20, 21, 22, // first triangle
+        20, 22, 23  // second triangle
     };
     
 
@@ -151,23 +208,6 @@ int main()
     glEnableVertexAttribArray(2);
 
 
-    /*
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    */
-
-
-    /*
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    */
-
-
-
     //-------------------------------------------------------------
     // Create the shaders
     //-------------------------------------------------------------
@@ -197,6 +237,9 @@ int main()
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
 
+        glEnable(GL_DEPTH_TEST);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::rotate(model, glm::radians(-50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -208,24 +251,14 @@ int main()
 
         model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 1.0f));
 
-        model = glm::scale(model, glm::vec3( sin((float)glfwGetTime()), sin((float)glfwGetTime()), sin((float)glfwGetTime())));
+        //model = glm::scale(model, glm::vec3( sin((float)glfwGetTime()), sin((float)glfwGetTime()), sin((float)glfwGetTime())));
 
         BaseTexturedShader.setMatrix4("model", model); 
         BaseTexturedShader.setMatrix4("view", view);
         BaseTexturedShader.setMatrix4("projection", projection);
 
-
-        /*
-        float timeValue = glfwGetTime();
-        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-        float vertValue = (sin(timeValue * 20));
-
-        MovingShader.set4Float("VerticeTimeMultiplier", 0.0f, vertValue, 0.0f, 1.0f);
-        MovingShader.set4Float("NewColor", 0.0f, greenValue, 0.0f, 1.0f);
-        */
-
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
         //glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
