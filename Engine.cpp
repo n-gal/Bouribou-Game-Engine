@@ -20,6 +20,12 @@
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
+float screenWidth = 1920.0f;
+float screenHeight = 1080.0f;
+
+double previousTime = glfwGetTime();
+int frameCount = 0;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -27,6 +33,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void drawTitle();
 void setupCMDWindowParams();
 void CalculateDeltaTime();
+int GetFps();
 
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -39,10 +46,13 @@ float lastFrame = 0.0f; // Time of last frame
 bool firstMouse = true;
 float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
 float pitch = 0.0f;
-float lastX = 800.0f / 2.0;
-float lastY = 600.0 / 2.0;
+float lastX = screenWidth / 2.0;
+float lastY = screenHeight / 2.0;
 float fov = 45.0f;
 
+
+bool cursorIsUnfocused = false;
+bool cursorIsHoveringUI = false;
 
 
 int main()
@@ -56,7 +66,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Bouribou Game Engine", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Bouribou Game Engine", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -246,7 +256,13 @@ int main()
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui::SetNextWindowSize(ImVec2(400, 200));
 
+    //UI variables
+    bool drawCube = true;
+    float cubeSpeed = 1;
+    float backgroundColor[4] = { 0.2f, 0.3f, 0.3f, 1.0f };
+    float textureBlendValue = 0.5;
 
     //-------------------------------------------------------------
     // Frame Loop
@@ -256,7 +272,7 @@ int main()
         CalculateDeltaTime();
         processInput(window);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui_ImplOpenGL3_NewFrame();
@@ -273,13 +289,13 @@ int main()
 
 
         glm::mat4 view = camera.GetViewMatrix();
-
         glm::mat4 projection;
-        projection = glm::perspective(glm::radians(camera.Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(camera.Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
 
 
         BaseTexturedShader.setMatrix4("view", view);
         BaseTexturedShader.setMatrix4("projection", projection);
+        BaseTexturedShader.setFloat("blend", textureBlendValue);
 
         glBindVertexArray(VAO);
         glBindVertexArray(VAO);
@@ -288,16 +304,33 @@ int main()
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
-            model = glm::rotate(model, sin((float)glfwGetTime()), glm::vec3(1.0f, 0.3f, 0.5f));
-            model = glm::scale(model, glm::vec3(sin((float)glfwGetTime()), sin((float)glfwGetTime()), sin((float)glfwGetTime())));
+            model = glm::rotate(model, sin((float)glfwGetTime()) * cubeSpeed, glm::vec3(1.0f, 0.3f, 0.5f));
+            model = glm::scale(model, glm::vec3(sin((float)glfwGetTime() * cubeSpeed), sin((float)glfwGetTime() * cubeSpeed), sin((float)glfwGetTime() * cubeSpeed)));
+            if (drawCube)
+                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
             BaseTexturedShader.setMatrix4("model", model);
         }
 
-        ImGui::Begin("Bouribou game engine interface");
-        ImGui::Text("hello world");
+
+        if (!io.WantCaptureMouse)
+        {
+            cursorIsHoveringUI = false;
+        }
+        else
+        {
+            cursorIsHoveringUI = true;
+        }
+        int fps = GetFps();
+
+        ImGui::Begin("Parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
+        ImGui::Text("FPS: %d", fps);
+        ImGui::Checkbox("draw objects", &drawCube);
+        ImGui::ColorPicker4("background color", backgroundColor);
+        ImGui::SliderFloat("cube speed", &cubeSpeed, 0, 10);
+        ImGui::SliderFloat("texture blending", &textureBlendValue, 0, 1);
         ImGui::End();
+
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -314,14 +347,19 @@ int main()
     return 0;
 }
 
+
+
 //-------------------------------------------------------------
 // Rescales the viewport with the window size
 //-------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    
+    screenWidth = width;
+    screenHeight = height;
     glViewport(0, 0, width, height);
 }
+
+
 
 //-------------------------------------------------------------
 // Draws the bouribou game engine title in the cmd
@@ -340,6 +378,8 @@ void drawTitle()
                                                                      \_/__/                                                  \_/__/  
 )" << '\n';
 }
+
+
 
 //-------------------------------------------------------------
 // Sets up the cmd window size to display the bouribou game enigne text properly
@@ -368,18 +408,28 @@ void setupCMDWindowParams()
     SetWindowPos(hwnd, NULL, consolePosX, consolePosY, consoleWidth, consoleHeight, SWP_SHOWWINDOW);
 }
 
+
+
 //-------------------------------------------------------------
 // Process keyobard inputs
 //-------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+        cursorIsUnfocused = true;
+    }
+
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !cursorIsHoveringUI)
+    {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        cursorIsUnfocused = false;
+    }
+
     
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        camera.MovementSpeed = 10.0f;
+        camera.MovementSpeed = 100.0f;
     else
         camera.ResetSpeed();
 
@@ -393,6 +443,8 @@ void processInput(GLFWwindow* window)
         camera.ProcessKeyboard(RIGHT, deltaTime);
 }
 
+
+
 //-------------------------------------------------------------
 // Calculates the DeltaTime
 //-------------------------------------------------------------
@@ -403,29 +455,41 @@ void CalculateDeltaTime()
     lastFrame = currentFrame;
 }
 
+
+
 //-------------------------------------------------------------
 // Processes mouse movement inputs
 //-------------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
-
-    if (firstMouse)
+    if (!cursorIsUnfocused)
     {
+        float xpos = static_cast<float>(xposIn);
+        float ypos = static_cast<float>(yposIn);
+
+        if (firstMouse)
+        {
+            lastX = xpos;
+            lastY = ypos;
+            firstMouse = false;
+        }
+
+        float xoffset = xpos - lastX;
+        float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
         lastX = xpos;
         lastY = ypos;
-        firstMouse = false;
+
+        camera.ProcessMouseMovement(xoffset, yoffset);
     }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
+    else
+    {
+        if(!firstMouse)
+            firstMouse = true;
+    }
 }
+
+
 
 //-------------------------------------------------------------
 // Processes scrollwheel inputs
@@ -433,4 +497,20 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+int GetFps()
+{
+    frameCount++;
+    if (glfwGetTime() - previousTime >= 1)
+    {
+        int fps = frameCount;
+        frameCount = 0;
+        previousTime = glfwGetTime();
+        return fps;
+    }
+    else if (glfwGetTime() < 1)
+    {
+        return 0;
+    }
 }
