@@ -41,6 +41,9 @@
     <ClInclude Include="stb_image.h">
       <Filter>Fichiers de ressources</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="BaseFragmentShader.glsl">
