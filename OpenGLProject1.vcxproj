@@ -161,6 +161,7 @@
     <Text Include="BaseTexturedFragmentShader.glsl">
       <FileType>Document</FileType>
     </Text>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
     <None Include="BaseVertexShader.glsl">
       <FileType>Document</FileType>

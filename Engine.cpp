@@ -79,12 +79,6 @@ int main()
     //-------------------------------------------------------------
     // Set up vertex data
     //-------------------------------------------------------------
-    float rectangleVertices[] = {
-         0.5f,  0.5f, 0.0f,  // top right
-         0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left
-    };
     float texturedRectangleVertices[] = {
         // Front face
         // positions          // colors           // texture coords
@@ -155,20 +149,6 @@ int main()
     };
     
 
-    float triangleVertices[] = {
-        // positions        
-         0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
-    };
-    
-    float colorVertices[] = {
-        // positions         // colors
-         0.5f, -0.5f, 0.0f,  0.5f, 0.5f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-         0.0f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f    // top 
-    };
-
     glm::vec3 cubePositions[] = {
     glm::vec3(0.0f,  0.0f,  0.0f),
     glm::vec3(2.0f,  5.0f, -15.0f),
@@ -185,7 +165,6 @@ int main()
     //-------------------------------------------------------------
     // Set up texture data
     //-------------------------------------------------------------
-
     stbi_set_flip_vertically_on_load(true);
     int width, height, nrChannels;
     unsigned int texture1, texture2;
@@ -234,7 +213,6 @@ int main()
     //-------------------------------------------------------------
     // Set up how vertex data is read
     //-------------------------------------------------------------
-
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -310,12 +288,18 @@ int main()
     return 0;
 }
 
+//-------------------------------------------------------------
+// Rescales the viewport with the window size
+//-------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     
     glViewport(0, 0, width, height);
 }
 
+//-------------------------------------------------------------
+// Draws the bouribou game engine title in the cmd
+//-------------------------------------------------------------
 void drawTitle()
 {
     std::cout << R"(
@@ -331,6 +315,9 @@ void drawTitle()
 )" << '\n';
 }
 
+//-------------------------------------------------------------
+// Sets up the cmd window size to display the bouribou game enigne text properly
+//-------------------------------------------------------------
 void setupCMDWindowParams()
 {
     int width = 160;
@@ -355,6 +342,9 @@ void setupCMDWindowParams()
     SetWindowPos(hwnd, NULL, consolePosX, consolePosY, consoleWidth, consoleHeight, SWP_SHOWWINDOW);
 }
 
+//-------------------------------------------------------------
+// Process keyobard inputs
+//-------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -377,6 +367,9 @@ void processInput(GLFWwindow* window)
         camera.ProcessKeyboard(RIGHT, deltaTime);
 }
 
+//-------------------------------------------------------------
+// Calculates the DeltaTime
+//-------------------------------------------------------------
 void CalculateDeltaTime()
 {
     float currentFrame = glfwGetTime();
@@ -384,6 +377,9 @@ void CalculateDeltaTime()
     lastFrame = currentFrame;
 }
 
+//-------------------------------------------------------------
+// Processes mouse movement inputs
+//-------------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
     float xpos = static_cast<float>(xposIn);
@@ -405,8 +401,9 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
+//-------------------------------------------------------------
+// Processes scrollwheel inputs
+//-------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(static_cast<float>(yoffset));

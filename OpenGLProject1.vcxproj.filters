@@ -33,6 +33,9 @@
     <ClCompile Include="ImageLoader.cpp">
       <Filter>Fichiers sources\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
