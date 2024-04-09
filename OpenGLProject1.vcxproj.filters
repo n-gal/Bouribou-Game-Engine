@@ -133,5 +133,11 @@
     <None Include="Shaders\VertexColorVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
+    <None Include="Shaders\BaseLitFragmentShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="Shaders\BaseLitVertexShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
   </ItemGroup>
 </Project>

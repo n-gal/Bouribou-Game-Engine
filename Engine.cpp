@@ -241,12 +241,15 @@ int main()
     // Create the shaders
     //-------------------------------------------------------------
     Shader BaseTexturedShader("Shaders/BaseTexturedVertexShader.glsl", "Shaders/BaseTexturedFragmentShader.glsl");
+    Shader BaseLitShader("Shaders/BaseLitVertexShader.glsl", "Shaders/BaseLitFragmentShader.glsl");
 
+    /*
     BaseTexturedShader.use();
     BaseTexturedShader.setInt("texture1", 0); 
     BaseTexturedShader.setInt("texture2", 1); 
+    */
 
-
+    BaseLitShader.use();
 
     //-------------------------------------------------------------
     // Initiate ImGui, manages the UI
@@ -266,6 +269,9 @@ int main()
     float textureBlendValue = 0.5;
     float vertexColorBlendValue = 1;
 
+    float materialColor[3] = { 0.0f, 0.0f, 0.0f};
+    float lightColor[3] = { 0.0f, 0.0f, 0.0f };
+
     //-------------------------------------------------------------
     // Frame Loop
     //-------------------------------------------------------------
@@ -274,7 +280,8 @@ int main()
         CalculateDeltaTime();
         processInput(window);
 
-        glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
+        //glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
+        glClearColor(lightColor[0], lightColor[1], lightColor[2], 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui_ImplOpenGL3_NewFrame();
@@ -294,11 +301,18 @@ int main()
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(camera.Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
 
-
+        /*
         BaseTexturedShader.setMatrix4("view", view);
         BaseTexturedShader.setMatrix4("projection", projection);
         BaseTexturedShader.setFloat("blend", textureBlendValue);
         BaseTexturedShader.setFloat("vertexColorStrength", vertexColorBlendValue);
+        */
+
+        BaseLitShader.set3Float("ObjectColor", materialColor[0], materialColor[1], materialColor[2]);
+        BaseLitShader.set3Float("LightColor", lightColor[0], lightColor[1], lightColor[2]);
+
+        BaseLitShader.setMatrix4("view", view);
+        BaseLitShader.setMatrix4("projection", projection);
 
         glBindVertexArray(VAO);
         glBindVertexArray(VAO);
@@ -312,7 +326,8 @@ int main()
             if (drawCube)
                 glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-            BaseTexturedShader.setMatrix4("model", model);
+            //BaseTexturedShader.setMatrix4("model", model);
+            BaseLitShader.setMatrix4("model", model);
         }
 
 
@@ -330,9 +345,15 @@ int main()
         ImGui::Text("FPS: %d", fps);
         ImGui::Checkbox("draw objects", &drawCube);
         ImGui::ColorPicker4("background color", backgroundColor);
+        ImGui::ColorPicker4("material color", materialColor);
+        ImGui::ColorPicker4("light color", lightColor);
+
+        /*
         ImGui::SliderFloat("cube speed", &cubeSpeed, 0, 10);
         ImGui::SliderFloat("texture blending", &textureBlendValue, 0, 1);
         ImGui::SliderFloat("vertex color strength", &vertexColorBlendValue, 0, 1);
+        */
+
         ImGui::End();
 
 

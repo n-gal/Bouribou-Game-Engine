@@ -176,6 +176,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BaseFragmentShader.glsl" />
+    <None Include="Shaders\BaseLitFragmentShader.glsl" />
+    <None Include="Shaders\BaseLitVertexShader.glsl" />
     <None Include="Shaders\BaseTexturedFragmentShader.glsl" />
     <None Include="Shaders\BaseTexturedVertexShader.glsl" />
     <None Include="Shaders\BaseVertexShader.glsl" />
