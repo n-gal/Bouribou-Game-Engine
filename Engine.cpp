@@ -1,5 +1,7 @@
 ﻿
-
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -234,6 +236,18 @@ int main()
     BaseTexturedShader.setInt("texture2", 1); 
 
 
+
+    //-------------------------------------------------------------
+    // Initiate ImGui, manages the UI
+    //-------------------------------------------------------------
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+
     //-------------------------------------------------------------
     // Frame Loop
     //-------------------------------------------------------------
@@ -244,6 +258,10 @@ int main()
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
@@ -276,10 +294,22 @@ int main()
             glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
             BaseTexturedShader.setMatrix4("model", model);
         }
-        //glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        ImGui::Begin("Bouribou game engine interface");
+        ImGui::Text("hello world");
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwTerminate();
     return 0;
 }
