@@ -76,6 +76,7 @@ int main()
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwMakeContextCurrent(window);
+    //glfwSwapInterval(0); - disables vsync
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -263,6 +264,7 @@ int main()
     float cubeSpeed = 1;
     float backgroundColor[4] = { 0.2f, 0.3f, 0.3f, 1.0f };
     float textureBlendValue = 0.5;
+    float vertexColorBlendValue = 1;
 
     //-------------------------------------------------------------
     // Frame Loop
@@ -296,6 +298,7 @@ int main()
         BaseTexturedShader.setMatrix4("view", view);
         BaseTexturedShader.setMatrix4("projection", projection);
         BaseTexturedShader.setFloat("blend", textureBlendValue);
+        BaseTexturedShader.setFloat("vertexColorStrength", vertexColorBlendValue);
 
         glBindVertexArray(VAO);
         glBindVertexArray(VAO);
@@ -329,6 +332,7 @@ int main()
         ImGui::ColorPicker4("background color", backgroundColor);
         ImGui::SliderFloat("cube speed", &cubeSpeed, 0, 10);
         ImGui::SliderFloat("texture blending", &textureBlendValue, 0, 1);
+        ImGui::SliderFloat("vertex color strength", &vertexColorBlendValue, 0, 1);
         ImGui::End();
 
 
@@ -429,7 +433,7 @@ void processInput(GLFWwindow* window)
 
     
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        camera.MovementSpeed = 100.0f;
+        camera.MovementSpeed = 10.0f;
     else
         camera.ResetSpeed();
 
@@ -441,6 +445,10 @@ void processInput(GLFWwindow* window)
         camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        camera.ProcessKeyboard(UP, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        camera.ProcessKeyboard(DOWN, deltaTime);
 }
 
 
