@@ -49,36 +49,34 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="BaseFragmentShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </Text>
-    <Text Include="DefinedColorVertexShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </Text>
-    <Text Include="BaseTexturedFragmentShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="BaseVertexShader.glsl">
+    <None Include="Shaders\BaseFragmentShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
-    <None Include="VertexColorVertexShader.glsl">
+    <None Include="Shaders\BaseTexturedFragmentShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
-    <None Include="VertexColorFragmentShader.glsl">
+    <None Include="Shaders\BaseTexturedVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
-    <None Include="MovingVertexShader.glsl">
+    <None Include="Shaders\BaseVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
-    <None Include="MovingFragmentShader.glsl">
+    <None Include="Shaders\DefinedColorFragmentShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
-    <None Include="DefinedColorFragmentShader.glsl">
+    <None Include="Shaders\DefinedColorVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
-    <None Include="BaseTexturedVertexShader.glsl">
+    <None Include="Shaders\MovingFragmentShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="Shaders\MovingVertexShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="Shaders\VertexColorFragmentShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="Shaders\VertexColorVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
   </ItemGroup>

@@ -169,7 +169,7 @@ int main()
     int width, height, nrChannels;
     unsigned int texture1, texture2;
 
-    unsigned char* data = stbi_load("real.png", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("Textures/real.png", &width, &height, &nrChannels, 0);
 
     glGenTextures(1, &texture1);
     glBindTexture(GL_TEXTURE_2D, texture1);
@@ -179,7 +179,7 @@ int main()
 
     stbi_image_free(data);
 
-    data = stbi_load("BouribouGameEngine.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("Textures/BouribouGameEngine.png", &width, &height, &nrChannels, 0);
 
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
@@ -227,11 +227,7 @@ int main()
     //-------------------------------------------------------------
     // Create the shaders
     //-------------------------------------------------------------
-    Shader VertexColorShader("VertexColorVertexShader.glsl", "VertexColorFragmentShader.glsl");
-    Shader BaseShader("BaseVertexShader.glsl", "BaseFragmentShader.glsl");
-    Shader MovingShader("MovingVertexShader.glsl", "MovingFragmentShader.glsl");
-    Shader DefinedColorShader("DefinedColorVertexShader.glsl", "DefinedColorFragmentShader.glsl");
-    Shader BaseTexturedShader("BaseTexturedVertexShader.glsl", "BaseTexturedFragmentShader.glsl");
+    Shader BaseTexturedShader("Shaders/BaseTexturedVertexShader.glsl", "Shaders/BaseTexturedFragmentShader.glsl");
 
     BaseTexturedShader.use();
     BaseTexturedShader.setInt("texture1", 0); 
