@@ -262,11 +262,6 @@ int main()
     ImGui_ImplOpenGL3_Init("#version 330");
     ImGui::SetNextWindowSize(ImVec2(400, 200));
 
-
-
-
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-    float lightPosFl[3]{ lightPos.x, lightPos.y, lightPos.z };
     //UI variables
     bool drawCube = true;
     float cubeSpeed = 1;
@@ -274,11 +269,19 @@ int main()
     float textureBlendValue = 0.5;
     float vertexColorBlendValue = 1;
 
-    float materialColor[3] = { 1.0f, 0.3f, 0.7f};
+    float materialColor[3] = { 1.0f, 0.3f, 0.7f };
     float lightColor[3] = { 0.6f, 1.0f, 0.2f };
-    
+
     float smoothness = 32;
     float specularStrength = 0.5;
+    float ambientStrength = 0.1;
+
+
+    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+    float lightPosFl[3]{ lightPos.x, lightPos.y, lightPos.z };
+
+
+
 
     //-------------------------------------------------------------
     // Frame Loop
@@ -317,8 +320,9 @@ int main()
         BaseLitShader.set3Float("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
         BaseLitShader.set3Float("lightPos", lightPos.x, lightPos.y, lightPos.z);
 
+        BaseLitShader.setFloat("ambientStrength", ambientStrength);
         BaseLitShader.setFloat("smoothness", smoothness);
-        BaseLitShader.setFloat("specularStrength", specularStrength);
+        BaseLitShader.setFloat("specularStrength", specularStrength); 
 
         BaseLitShader.setMatrix4("view", view);
         BaseLitShader.setMatrix4("projection", projection);
@@ -362,7 +366,7 @@ int main()
 
         ImGui::Checkbox("draw objects", &drawCube);
         ImGui::ColorPicker4("background color", backgroundColor);
-
+        ImGui::SliderFloat("cube speed", &cubeSpeed, 0, 10);
 
         ImGui::End();
 
@@ -372,6 +376,7 @@ int main()
         ImGui::SliderFloat3("light move", lightPosFl, -2, 2);
         ImGui::SliderFloat("smoothness", &smoothness, 0, 100);
         ImGui::SliderFloat("specular strength", &specularStrength, 0, 2);
+        ImGui::SliderFloat("ambient strength", &ambientStrength, 0, 2);
         ImGui::End();
 
         ImGui::Begin("Monitor", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
