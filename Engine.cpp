@@ -264,7 +264,7 @@ int main()
 
     //UI variables
     bool drawCube = true;
-    float cubeSpeed = 1;
+    float cubeSpeed = 0;
     float backgroundColor[4] = { 0.2f, 0.3f, 0.3f, 1.0f };
     float textureBlendValue = 0.5;
     float vertexColorBlendValue = 1;
@@ -275,6 +275,8 @@ int main()
     float smoothness = 32;
     float specularStrength = 0.5;
     float ambientStrength = 0.1;
+    float spreadStrength = 0.1;
+    float lightFalloff = 1;
 
 
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -309,6 +311,10 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+
+        //-------------------------------------------------------------
+        // First cube
+        //-------------------------------------------------------------
         glBindVertexArray(cubeVAO);
         BaseLitShader.use();
         glm::mat4 view = camera.GetViewMatrix();
@@ -320,9 +326,11 @@ int main()
         BaseLitShader.set3Float("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
         BaseLitShader.set3Float("lightPos", lightPos.x, lightPos.y, lightPos.z);
 
+        BaseLitShader.setFloat("spreadStrength", spreadStrength);
         BaseLitShader.setFloat("ambientStrength", ambientStrength);
         BaseLitShader.setFloat("smoothness", smoothness);
         BaseLitShader.setFloat("specularStrength", specularStrength); 
+        BaseLitShader.setFloat("lightFalloff", lightFalloff);
 
         BaseLitShader.setMatrix4("view", view);
         BaseLitShader.setMatrix4("projection", projection);
@@ -337,6 +345,11 @@ int main()
         glBindVertexArray(lightCubeVAO);
         BaseUnlitShader.use();
 
+
+
+        //-------------------------------------------------------------
+        // Light cube
+        //-------------------------------------------------------------
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
@@ -349,6 +362,8 @@ int main()
         if (drawCube)
             glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
+        
+        
         //-------------------------------------------------------------
         // UI
         //-------------------------------------------------------------
@@ -371,18 +386,22 @@ int main()
         ImGui::End();
 
         ImGui::Begin("Light parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-        ImGui::ColorPicker4("material color", materialColor);
         ImGui::ColorPicker4("light color", lightColor);
         ImGui::SliderFloat3("light move", lightPosFl, -2, 2);
+        ImGui::SliderFloat("ambient strength", &ambientStrength, 0, 2);
+        ImGui::SliderFloat("spread strength", &spreadStrength, 0, 2);
+        ImGui::SliderFloat("light falloff", &lightFalloff, 0, 5);
+        ImGui::End();
+
+        ImGui::Begin("Material parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
+        ImGui::ColorPicker4("material color", materialColor);
         ImGui::SliderFloat("smoothness", &smoothness, 0, 100);
         ImGui::SliderFloat("specular strength", &specularStrength, 0, 2);
-        ImGui::SliderFloat("ambient strength", &ambientStrength, 0, 2);
         ImGui::End();
 
         ImGui::Begin("Monitor", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
         ImGui::Text("FPS: %d", fps);
         ImGui::End();
-
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
