@@ -94,46 +94,46 @@ int main()
     //-------------------------------------------------------------
     float texturedRectangleVertices[] = {
         // Front face
-        // positions          // colors           // texture coords
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 0.0f,   // bottom left
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 0.0f,   // bottom right
-         0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,   1.0f, 1.0f,   // top right
-        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
-
-        // Right face
-        // positions          // colors           // texture coords
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-         0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,   0.0f, 1.0f,   // top left
-
-        // Back face
-        // positions          // colors           // texture coords
-        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
-
-        // Left face
-        // positions          // colors           // texture coords
-        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
-        -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
-
-        // Top face
-        // positions          // colors           // texture coords
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
-         0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   // top left
-
-        // Bottom face
-        // positions          // colors           // texture coords
-        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   // bottom left
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
+        // positions            //normals
+        -0.5f, -0.5f,  0.5f,    0.0f, 0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,    0.0f, 0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,    0.0f, 0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f, 0.0f, 1.0f,
+                              
+        // Right face         
+        // positions          
+         0.5f, -0.5f,  0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,
+                              
+        // Back face          
+        // positions          
+        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+                              
+        // Left face          
+        // positions          
+        -0.5f, -0.5f, -0.5f,    -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,    -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,    -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,    -1.0f,  0.0f,  0.0f,
+                              
+        // Top face           
+        // positions          
+        -0.5f,  0.5f,  0.5f,    0.0f, 1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,    0.0f, 1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,    0.0f, 1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f, 1.0f,  0.0f,
+                              
+        // Bottom face        
+        // positions          
+        -0.5f, -0.5f, -0.5f,    0.0f,  -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,    0.0f,  -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,    0.0f,  -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f,  -1.0f,  0.0f
     };
     unsigned int indices[] = {
         // Front face
@@ -205,14 +205,11 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(texturedRectangleVertices), texturedRectangleVertices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    // normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
 
     unsigned int EBO;
     glGenBuffers(1, &EBO);
@@ -232,15 +229,12 @@ int main()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    // normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
 
     //-------------------------------------------------------------
     // Create the shaders
@@ -269,8 +263,10 @@ int main()
     ImGui::SetNextWindowSize(ImVec2(400, 200));
 
 
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
+
+    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+    float lightPosFl[3]{ lightPos.x, lightPos.y, lightPos.z };
     //UI variables
     bool drawCube = true;
     float cubeSpeed = 1;
@@ -280,14 +276,16 @@ int main()
 
     float materialColor[3] = { 1.0f, 0.3f, 0.7f};
     float lightColor[3] = { 0.6f, 1.0f, 0.2f };
-
-
+    
+    float smoothness = 32;
+    float specularStrength = 0.5;
 
     //-------------------------------------------------------------
     // Frame Loop
     //-------------------------------------------------------------
     while (!glfwWindowShouldClose(window))
     {
+        glm::vec3 lightPos(lightPosFl[0], lightPosFl[1], lightPosFl[2]);
         CalculateDeltaTime();
         processInput(window);
 
@@ -314,8 +312,13 @@ int main()
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(camera.Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
 
-        BaseLitShader.set3Float("ObjectColor", materialColor[0], materialColor[1], materialColor[2]);
-        BaseLitShader.set3Float("LightColor", lightColor[0], lightColor[1], lightColor[2]);
+        BaseLitShader.set3Float("objectColor", materialColor[0], materialColor[1], materialColor[2]);
+        BaseLitShader.set3Float("lightColor", lightColor[0], lightColor[1], lightColor[2]);
+        BaseLitShader.set3Float("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
+        BaseLitShader.set3Float("lightPos", lightPos.x, lightPos.y, lightPos.z);
+
+        BaseLitShader.setFloat("smoothness", smoothness);
+        BaseLitShader.setFloat("specularStrength", specularStrength);
 
         BaseLitShader.setMatrix4("view", view);
         BaseLitShader.setMatrix4("projection", projection);
@@ -335,7 +338,7 @@ int main()
         model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
 
         BaseUnlitShader.setMatrix4("model", model);
-        BaseUnlitShader.set3Float("LightColor", lightColor[0], lightColor[1], lightColor[2]);
+        BaseUnlitShader.set3Float("lightColor", lightColor[0], lightColor[1], lightColor[2]);
         BaseUnlitShader.setMatrix4("view", view);
         BaseUnlitShader.setMatrix4("projection", projection);
 
@@ -355,13 +358,24 @@ int main()
         }
         int fps = GetFps();
 
-        ImGui::Begin("Parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-        ImGui::Text("FPS: %d", fps);
+        ImGui::Begin("Scene parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
+
         ImGui::Checkbox("draw objects", &drawCube);
         ImGui::ColorPicker4("background color", backgroundColor);
+
+
+        ImGui::End();
+
+        ImGui::Begin("Light parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
         ImGui::ColorPicker4("material color", materialColor);
         ImGui::ColorPicker4("light color", lightColor);
+        ImGui::SliderFloat3("light move", lightPosFl, -2, 2);
+        ImGui::SliderFloat("smoothness", &smoothness, 0, 100);
+        ImGui::SliderFloat("specular strength", &specularStrength, 0, 2);
+        ImGui::End();
 
+        ImGui::Begin("Monitor", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
+        ImGui::Text("FPS: %d", fps);
         ImGui::End();
 
 
@@ -533,7 +547,10 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 //-------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    camera.ProcessMouseScroll(static_cast<float>(yoffset));
+    if (!cursorIsHoveringUI)
+    {
+        camera.ProcessMouseScroll(static_cast<float>(yoffset));
+    }
 }
 
 int GetFps()
