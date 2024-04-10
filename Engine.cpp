@@ -160,20 +160,8 @@ int main()
         20, 21, 22, // first triangle
         20, 22, 23  // second triangle
     };
-    
 
-    glm::vec3 cubePositions[] = {
-    glm::vec3(0.0f,  0.0f,  0.0f),
-    glm::vec3(2.0f,  5.0f, -15.0f),
-    glm::vec3(-1.5f, -2.2f, -2.5f),
-    glm::vec3(-3.8f, -2.0f, -12.3f),
-    glm::vec3(2.4f, -0.4f, -3.5f),
-    glm::vec3(-1.7f,  3.0f, -7.5f),
-    glm::vec3(1.3f, -2.0f, -2.5f),
-    glm::vec3(1.5f,  2.0f, -2.5f),
-    glm::vec3(1.5f,  0.2f, -1.5f),
-    glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
+
 
     //-------------------------------------------------------------
     // Set up texture data
@@ -203,29 +191,19 @@ int main()
 
 
     //-------------------------------------------------------------
-    // Set up VAO, VBO & EBO 
+    // Set up cube VAO + VBO & EBO
     //-------------------------------------------------------------
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    unsigned int cubeVAO;
+    glGenVertexArrays(1, &cubeVAO);
+    glBindVertexArray(cubeVAO);
+
+
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(texturedRectangleVertices), texturedRectangleVertices, GL_STATIC_DRAW);
-    
-    
-    unsigned int EBO;
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    
 
-
-    //-------------------------------------------------------------
-    // Set up how vertex data is read
-    //-------------------------------------------------------------
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -236,12 +214,40 @@ int main()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
+    unsigned int EBO;
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+
+    //-------------------------------------------------------------
+    // Set up light VAO
+    //-------------------------------------------------------------
+    unsigned int lightCubeVAO;
+    glGenVertexArrays(1, &lightCubeVAO);
+    glBindVertexArray(lightCubeVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
 
     //-------------------------------------------------------------
     // Create the shaders
     //-------------------------------------------------------------
     Shader BaseTexturedShader("Shaders/BaseTexturedVertexShader.glsl", "Shaders/BaseTexturedFragmentShader.glsl");
     Shader BaseLitShader("Shaders/BaseLitVertexShader.glsl", "Shaders/BaseLitFragmentShader.glsl");
+    Shader BaseUnlitShader("Shaders/BaseUnlitVertexShader.glsl", "Shaders/BaseUnlitFragmentShader.glsl");
 
     /*
     BaseTexturedShader.use();
@@ -249,7 +255,7 @@ int main()
     BaseTexturedShader.setInt("texture2", 1); 
     */
 
-    BaseLitShader.use();
+
 
     //-------------------------------------------------------------
     // Initiate ImGui, manages the UI
@@ -262,6 +268,9 @@ int main()
     ImGui_ImplOpenGL3_Init("#version 330");
     ImGui::SetNextWindowSize(ImVec2(400, 200));
 
+
+    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
     //UI variables
     bool drawCube = true;
     float cubeSpeed = 1;
@@ -269,8 +278,10 @@ int main()
     float textureBlendValue = 0.5;
     float vertexColorBlendValue = 1;
 
-    float materialColor[3] = { 0.0f, 0.0f, 0.0f};
-    float lightColor[3] = { 0.0f, 0.0f, 0.0f };
+    float materialColor[3] = { 1.0f, 0.3f, 0.7f};
+    float lightColor[3] = { 0.6f, 1.0f, 0.2f };
+
+
 
     //-------------------------------------------------------------
     // Frame Loop
@@ -280,8 +291,8 @@ int main()
         CalculateDeltaTime();
         processInput(window);
 
-        //glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
-        glClearColor(lightColor[0], lightColor[1], lightColor[2], 1);
+        glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
+        //glClearColor(lightColor[0], lightColor[1], lightColor[2], 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui_ImplOpenGL3_NewFrame();
@@ -297,16 +308,11 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+        glBindVertexArray(cubeVAO);
+        BaseLitShader.use();
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(camera.Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
-
-        /*
-        BaseTexturedShader.setMatrix4("view", view);
-        BaseTexturedShader.setMatrix4("projection", projection);
-        BaseTexturedShader.setFloat("blend", textureBlendValue);
-        BaseTexturedShader.setFloat("vertexColorStrength", vertexColorBlendValue);
-        */
 
         BaseLitShader.set3Float("ObjectColor", materialColor[0], materialColor[1], materialColor[2]);
         BaseLitShader.set3Float("LightColor", lightColor[0], lightColor[1], lightColor[2]);
@@ -314,23 +320,31 @@ int main()
         BaseLitShader.setMatrix4("view", view);
         BaseLitShader.setMatrix4("projection", projection);
 
-        glBindVertexArray(VAO);
-        glBindVertexArray(VAO);
-        for (unsigned int i = 0; i < 10; i++)
-        {
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, sin((float)glfwGetTime()) * cubeSpeed, glm::vec3(1.0f, 0.3f, 0.5f));
-            model = glm::scale(model, glm::vec3(sin((float)glfwGetTime() * cubeSpeed), sin((float)glfwGetTime() * cubeSpeed), sin((float)glfwGetTime() * cubeSpeed)));
-            if (drawCube)
-                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, sin((float)glfwGetTime()) * cubeSpeed, glm::vec3(1.0f, 0.3f, 0.5f));
+        //model = glm::scale(model, glm::vec3(sin((float)glfwGetTime() * cubeSpeed), sin((float)glfwGetTime() * cubeSpeed), sin((float)glfwGetTime() * cubeSpeed)));
+        BaseLitShader.setMatrix4("model", model);
 
-            //BaseTexturedShader.setMatrix4("model", model);
-            BaseLitShader.setMatrix4("model", model);
-        }
+        if (drawCube)
+            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(lightCubeVAO);
+        BaseUnlitShader.use();
 
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
 
+        BaseUnlitShader.setMatrix4("model", model);
+        BaseUnlitShader.set3Float("LightColor", lightColor[0], lightColor[1], lightColor[2]);
+        BaseUnlitShader.setMatrix4("view", view);
+        BaseUnlitShader.setMatrix4("projection", projection);
+
+        if (drawCube)
+            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+        //-------------------------------------------------------------
+        // UI
+        //-------------------------------------------------------------
         if (!io.WantCaptureMouse)
         {
             cursorIsHoveringUI = false;
@@ -347,12 +361,6 @@ int main()
         ImGui::ColorPicker4("background color", backgroundColor);
         ImGui::ColorPicker4("material color", materialColor);
         ImGui::ColorPicker4("light color", lightColor);
-
-        /*
-        ImGui::SliderFloat("cube speed", &cubeSpeed, 0, 10);
-        ImGui::SliderFloat("texture blending", &textureBlendValue, 0, 1);
-        ImGui::SliderFloat("vertex color strength", &vertexColorBlendValue, 0, 1);
-        */
 
         ImGui::End();
 
