@@ -30,6 +30,7 @@ float screenHeight = 1080.0f;
 
 double previousTime = glfwGetTime();
 int frameCount = 0;
+int lastFps = 0;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -362,7 +363,7 @@ int main()
         BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
 
 
-        std::cout << GetFps() << "\n";
+
 
         model = glm::mat4(1.0f);
         model = glm::rotate(model, sin((float)glfwGetTime()) * cubeSpeed, glm::vec3(1.0f, 0.3f, 0.5f));
@@ -401,8 +402,8 @@ int main()
         ImGui::End();
 
         ImGui::Begin("Monitor", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-
-        //ImGui::Text("FPS: %d", ());
+        int fps = GetFps();
+        ImGui::Text("FPS: %d", fps);
 
 
         ImGui::End();
@@ -589,10 +590,12 @@ int GetFps()
         int fps = frameCount;
         frameCount = 0;
         previousTime = glfwGetTime();
+        lastFps = fps;
         return fps;
     }
     else if (glfwGetTime() < 1)
     {
         return 0;
     }
+    return lastFps;
 }
