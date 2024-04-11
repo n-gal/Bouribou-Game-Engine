@@ -269,11 +269,11 @@ int main()
     float textureBlendValue = 0.5;
     float vertexColorBlendValue = 1;
 
-    float materialColor[3] = { 1.0f, 0.3f, 0.7f };
+    float diffuse[3] = { 1.0f, 0.3f, 0.7f };
+    float specularColor[3] = { 1.0f, 0.3f, 0.7f };
     float lightColor[3] = { 0.6f, 1.0f, 0.2f };
 
     float smoothness = 32;
-    float specularStrength = 0.5;
     float ambientStrength = 0.1;
     float spreadStrength = 0.1;
     float lightFalloff = 1;
@@ -321,15 +321,15 @@ int main()
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(camera.Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
 
-        BaseLitShader.set3Float("objectColor", materialColor[0], materialColor[1], materialColor[2]);
+        BaseLitShader.set3Float("inMaterial.diffuse", diffuse[0], diffuse[1], diffuse[2]);
+        BaseLitShader.set3Float("inMaterial.specular", specularColor[0], specularColor[1], specularColor[2]);
         BaseLitShader.set3Float("lightColor", lightColor[0], lightColor[1], lightColor[2]);
         BaseLitShader.set3Float("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
         BaseLitShader.set3Float("lightPos", lightPos.x, lightPos.y, lightPos.z);
 
         BaseLitShader.setFloat("spreadStrength", spreadStrength);
         BaseLitShader.setFloat("ambientStrength", ambientStrength);
-        BaseLitShader.setFloat("smoothness", smoothness);
-        BaseLitShader.setFloat("specularStrength", specularStrength); 
+        BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
         BaseLitShader.setFloat("lightFalloff", lightFalloff);
 
         BaseLitShader.setMatrix4("view", view);
@@ -394,9 +394,9 @@ int main()
         ImGui::End();
 
         ImGui::Begin("Material parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-        ImGui::ColorPicker4("material color", materialColor);
+        ImGui::ColorPicker4("diffuse color", diffuse);
+        ImGui::ColorPicker4("specular color", specularColor);
         ImGui::SliderFloat("smoothness", &smoothness, 0, 100);
-        ImGui::SliderFloat("specular strength", &specularStrength, 0, 2);
         ImGui::End();
 
         ImGui::Begin("Monitor", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
