@@ -76,7 +76,7 @@ int main()
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwMakeContextCurrent(window);
-    //glfwSwapInterval(0); - disables vsync
+    glfwSwapInterval(0);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -271,17 +271,21 @@ int main()
 
     float diffuse[3] = { 1.0f, 0.3f, 0.7f };
     float specularColor[3] = { 1.0f, 0.3f, 0.7f };
-    float lightColor[3] = { 0.6f, 1.0f, 0.2f };
-
     float smoothness = 32;
+
+    float lightColor[3] = { 0.6f, 1.0f, 0.2f };
     float ambientStrength = 0.1;
     float spreadStrength = 0.1;
     float lightFalloff = 1;
-
-
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
     float lightPosFl[3]{ lightPos.x, lightPos.y, lightPos.z };
 
+    float lightColor2[3] = { 0.6f, 1.0f, 0.2f };
+    float ambientStrength2 = 0.1;
+    float spreadStrength2 = 0.1;
+    float lightFalloff2 = 1;
+    glm::vec3 lightPos2(1.2f, 1.0f, 2.0f);
+    float lightPosFl2[3]{ lightPos2.x, lightPos2.y, lightPos2.z };
 
 
 
@@ -291,6 +295,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         glm::vec3 lightPos(lightPosFl[0], lightPosFl[1], lightPosFl[2]);
+        glm::vec3 lightPos2(lightPosFl2[0], lightPosFl2[1], lightPosFl2[2]);
         CalculateDeltaTime();
         processInput(window);
 
@@ -323,14 +328,22 @@ int main()
 
         BaseLitShader.set3Float("inMaterial.diffuse", diffuse[0], diffuse[1], diffuse[2]);
         BaseLitShader.set3Float("inMaterial.specular", specularColor[0], specularColor[1], specularColor[2]);
+        BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
+
+
         BaseLitShader.set3Float("lightColor", lightColor[0], lightColor[1], lightColor[2]);
         BaseLitShader.set3Float("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
         BaseLitShader.set3Float("lightPos", lightPos.x, lightPos.y, lightPos.z);
-
         BaseLitShader.setFloat("spreadStrength", spreadStrength);
         BaseLitShader.setFloat("ambientStrength", ambientStrength);
-        BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
         BaseLitShader.setFloat("lightFalloff", lightFalloff);
+
+        BaseLitShader.set3Float("lightColor2", lightColor2[0], lightColor2[1], lightColor2[2]);
+        BaseLitShader.set3Float("lightPos2", lightPos2.x, lightPos2.y, lightPos2.z);
+        BaseLitShader.setFloat("spreadStrength2", spreadStrength2);
+        BaseLitShader.setFloat("ambientStrength2", ambientStrength2);
+        BaseLitShader.setFloat("lightFalloff2", lightFalloff2);
+
 
         BaseLitShader.setMatrix4("view", view);
         BaseLitShader.setMatrix4("projection", projection);
@@ -362,6 +375,19 @@ int main()
         if (drawCube)
             glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
+        //-------------------------------------------------------------
+        // Light cube 2
+        //-------------------------------------------------------------
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos2);
+        model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
+
+        BaseUnlitShader.setMatrix4("model", model);
+        BaseUnlitShader.set3Float("lightColor", lightColor2[0], lightColor2[1], lightColor2[2]);
+
+        if (drawCube)
+            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
         
         
         //-------------------------------------------------------------
@@ -378,19 +404,25 @@ int main()
         int fps = GetFps();
 
         ImGui::Begin("Scene parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-
         ImGui::Checkbox("draw objects", &drawCube);
         ImGui::ColorPicker4("background color", backgroundColor);
         ImGui::SliderFloat("cube speed", &cubeSpeed, 0, 10);
-
         ImGui::End();
 
-        ImGui::Begin("Light parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
+        ImGui::Begin("Light1 parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
         ImGui::ColorPicker4("light color", lightColor);
         ImGui::SliderFloat3("light move", lightPosFl, -2, 2);
         ImGui::SliderFloat("ambient strength", &ambientStrength, 0, 2);
         ImGui::SliderFloat("spread strength", &spreadStrength, 0, 2);
         ImGui::SliderFloat("light falloff", &lightFalloff, 0, 5);
+        ImGui::End();
+
+        ImGui::Begin("Light2 parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
+        ImGui::ColorPicker4("light color", lightColor2);
+        ImGui::SliderFloat3("light move", lightPosFl2, -2, 2);
+        ImGui::SliderFloat("ambient strength", &ambientStrength2, 0, 2);
+        ImGui::SliderFloat("spread strength", &spreadStrength2, 0, 2);
+        ImGui::SliderFloat("light falloff", &lightFalloff2, 0, 5);
         ImGui::End();
 
         ImGui::Begin("Material parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);

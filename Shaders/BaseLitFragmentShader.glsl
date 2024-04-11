@@ -18,6 +18,12 @@ uniform float spreadStrength = 0.1;
 uniform float ambientStrength = 0.1;
 uniform float lightFalloff = 1;
 
+uniform vec3 lightColor2;
+uniform vec3 lightPos2;
+uniform float spreadStrength2 = 0.1;
+uniform float ambientStrength2 = 0.1;
+uniform float lightFalloff2 = 1;
+
 in vec3 Normal;
 in vec3 FragPos;
 
@@ -47,5 +53,33 @@ void main()
 
     // result
     vec3 result = ambient + ((((spread + diffuse + specular) * inMaterial.diffuse)) * attenuation);
+
+
+
+    // light 2
+
+
+    // ambient lighting
+    ambient = ambientStrength2 * lightColor2 * inMaterial.diffuse;
+
+    // spread lighting, omnidirectional lighting that ignores normals
+    spread = spreadStrength2 * lightColor2;
+
+    // diffuse lighting
+    lightDir = normalize(lightPos2 - FragPos);
+    diff = max(dot(norm, lightDir), 0.0);
+    diffuse = diff * lightColor2;
+
+    // specular lighting
+    reflectDir = reflect(-lightDir, norm);
+    spec = pow(max(dot(viewDir, reflectDir), 0.0), inMaterial.smoothness);
+    specular = inMaterial.specular * spec * lightColor2;
+
+    // light attenuation
+    lightDistance = distance(FragPos, lightPos2);
+    attenuation = 1.0 / (1.0 + lightFalloff2 * lightDistance * lightDistance);
+
+    result = result + (ambient + ((((spread + diffuse + specular) * inMaterial.diffuse)) * attenuation));
+
     FragColor = vec4(result, 1.0);
 }
