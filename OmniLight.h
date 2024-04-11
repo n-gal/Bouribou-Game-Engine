@@ -45,9 +45,8 @@ public:
     const char* windowName;
 
 
-    OmniLight(unsigned int id) : color{1,1,1}, ambientStrength(0.0f), spreadStrength(0.0f), falloff(1.0f), pos(0.0f), posFl{ 1.0f, 1.0f, 1.0f }
+    OmniLight() : color{1,1,1}, ambientStrength(0.0f), spreadStrength(0.0f), falloff(1.0f), pos(0.0f), posFl{ 1.0f, 1.0f, 1.0f }
     {
-        ID = id;
     }
 
     void updatePos()

@@ -82,7 +82,7 @@ int main()
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(0);
+    //glfwSwapInterval(0); - disables vsync
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -279,18 +279,13 @@ int main()
     float specularColor[3] = { 1.0f, 0.3f, 0.7f };
     float smoothness = 32;
 
-    OmniLight light(1);
-    OmniLight light2(2);
-    OmniLight light3(3);
+    std::vector<OmniLight> lights(10);
 
     //-------------------------------------------------------------
     // Frame Loop
     //-------------------------------------------------------------
     while (!glfwWindowShouldClose(window))
     {
-        light.updatePos();
-        light2.updatePos();
-
 
         CalculateDeltaTime();
         processInput(window);
@@ -311,80 +306,75 @@ int main()
         glEnable(GL_DEPTH_TEST);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glm::mat4 view = camera.GetViewMatrix();
+        glm::mat4 projection;
+        projection = glm::perspective(glm::radians(camera.Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
+        glm::mat4 model = glm::mat4(1.0f);
+
+        BaseUnlitShader.use();
+        BaseUnlitShader.setMatrix4("view", view);
+        BaseUnlitShader.setMatrix4("projection", projection);
+        int i = 0;
+        for (auto& light : lights)
+        {
+            i++;
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, light.pos);
+            model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
+
+            BaseUnlitShader.use();
+            BaseUnlitShader.setMatrix4("model", model);
+            BaseUnlitShader.set3Float("lightColor", light.color[0], light.color[1], light.color[2]);
+
+
+            glBindVertexArray(lightCubeVAO);
+            if (drawCube)
+                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+            light.ID = i;
+            light.updatePos();
+            light.updateUi(cursorIsUnfocused);
+
+            BaseLitShader.use();
+
+            BaseLitShader.set3Float(("inLight[" + std::to_string(i) + "].lightColor").c_str(), light.color[0], light.color[1], light.color[2]);
+            BaseLitShader.set3Float(("inLight[" + std::to_string(i) + "].lightPos").c_str(), light.pos.x, light.pos.y, light.pos.z);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].spreadStrength").c_str(), light.spreadStrength);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].ambientStrength").c_str(), light.ambientStrength);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].lightFalloff").c_str(), light.falloff);
+        }
 
 
         //-------------------------------------------------------------
         // First cube
         //-------------------------------------------------------------
         glBindVertexArray(cubeVAO);
+
         BaseLitShader.use();
-        glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 projection;
-        projection = glm::perspective(glm::radians(camera.Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
+        BaseLitShader.set3Float("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
+
+        BaseLitShader.setMatrix4("view", view);
+        BaseLitShader.setMatrix4("projection", projection);
+
 
         BaseLitShader.set3Float("inMaterial.diffuse", diffuse[0], diffuse[1], diffuse[2]);
         BaseLitShader.set3Float("inMaterial.specular", specularColor[0], specularColor[1], specularColor[2]);
         BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
 
 
-        BaseLitShader.set3Float("lightColor", light.color[0], light.color[1], light.color[2]);
-        BaseLitShader.set3Float("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
-        BaseLitShader.set3Float("lightPos", light.pos.x, light.pos.y, light.pos.z);
-        BaseLitShader.setFloat("spreadStrength", light.spreadStrength);
-        BaseLitShader.setFloat("ambientStrength", light.ambientStrength);
-        BaseLitShader.setFloat("lightFalloff", light.falloff);
+        std::cout << GetFps() << "\n";
 
-        BaseLitShader.set3Float("lightColor2", light2.color[0], light2.color[1], light2.color[2]);
-        BaseLitShader.set3Float("lightPos2", light2.pos.x, light2.pos.y, light2.pos.z);
-        BaseLitShader.setFloat("spreadStrength2", light2.spreadStrength);
-        BaseLitShader.setFloat("ambientStrength2", light2.ambientStrength);
-        BaseLitShader.setFloat("lightFalloff2", light2.falloff);
-
-
-        BaseLitShader.setMatrix4("view", view);
-        BaseLitShader.setMatrix4("projection", projection);
-
-        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::mat4(1.0f);
         model = glm::rotate(model, sin((float)glfwGetTime()) * cubeSpeed, glm::vec3(1.0f, 0.3f, 0.5f));
-        //model = glm::scale(model, glm::vec3(sin((float)glfwGetTime() * cubeSpeed), sin((float)glfwGetTime() * cubeSpeed), sin((float)glfwGetTime() * cubeSpeed)));
         BaseLitShader.setMatrix4("model", model);
 
-        if (drawCube)
-            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(lightCubeVAO);
-        BaseUnlitShader.use();
 
-
-
-        //-------------------------------------------------------------
-        // Light cube
-        //-------------------------------------------------------------
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, light.pos);
-        model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
-
-        BaseUnlitShader.setMatrix4("model", model);
-        BaseUnlitShader.set3Float("lightColor", light.color[0], light.color[1], light.color[2]);
-        BaseUnlitShader.setMatrix4("view", view);
-        BaseUnlitShader.setMatrix4("projection", projection);
 
         if (drawCube)
             glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-        //-------------------------------------------------------------
-        // Light cube 2
-        //-------------------------------------------------------------
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, light2.pos);
-        model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
 
-        BaseUnlitShader.setMatrix4("model", model);
-        BaseUnlitShader.set3Float("lightColor", light2.color[0], light2.color[1], light2.color[2]);
 
-        if (drawCube)
-            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-        
         
         //-------------------------------------------------------------
         // UI
@@ -397,16 +387,12 @@ int main()
         {
             cursorIsHoveringUI = true;
         }
-        int fps = GetFps();
 
         ImGui::Begin("Scene parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
         ImGui::Checkbox("draw objects", &drawCube);
         ImGui::ColorPicker4("background color", backgroundColor);
         ImGui::SliderFloat("cube speed", &cubeSpeed, 0, 10);
         ImGui::End();
-
-        light.updateUi(cursorIsUnfocused);
-        light2.updateUi(cursorIsUnfocused);
 
         ImGui::Begin("Material parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
         ImGui::ColorPicker4("diffuse color", diffuse);
@@ -415,7 +401,10 @@ int main()
         ImGui::End();
 
         ImGui::Begin("Monitor", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-        ImGui::Text("FPS: %d", fps);
+
+        //ImGui::Text("FPS: %d", ());
+
+
         ImGui::End();
 
         ImGui::Render();
