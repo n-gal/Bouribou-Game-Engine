@@ -11,14 +11,19 @@
 #include "Shader.h"
 #include "stb_image.h"
 #include "camera.h"
+#include "OmniLight.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 
-// camera
+//-------------------------------------------------------------
+// Instantiate objects
+//-------------------------------------------------------------
+
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
 
 float screenWidth = 1920.0f;
 float screenHeight = 1080.0f;
@@ -34,6 +39,7 @@ void drawTitle();
 void setupCMDWindowParams();
 void CalculateDeltaTime();
 int GetFps();
+
 
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -273,29 +279,19 @@ int main()
     float specularColor[3] = { 1.0f, 0.3f, 0.7f };
     float smoothness = 32;
 
-    float lightColor[3] = { 0.6f, 1.0f, 0.2f };
-    float ambientStrength = 0.1;
-    float spreadStrength = 0.1;
-    float lightFalloff = 1;
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-    float lightPosFl[3]{ lightPos.x, lightPos.y, lightPos.z };
-
-    float lightColor2[3] = { 0.6f, 1.0f, 0.2f };
-    float ambientStrength2 = 0.1;
-    float spreadStrength2 = 0.1;
-    float lightFalloff2 = 1;
-    glm::vec3 lightPos2(1.2f, 1.0f, 2.0f);
-    float lightPosFl2[3]{ lightPos2.x, lightPos2.y, lightPos2.z };
-
-
+    OmniLight light(1);
+    OmniLight light2(2);
+    OmniLight light3(3);
 
     //-------------------------------------------------------------
     // Frame Loop
     //-------------------------------------------------------------
     while (!glfwWindowShouldClose(window))
     {
-        glm::vec3 lightPos(lightPosFl[0], lightPosFl[1], lightPosFl[2]);
-        glm::vec3 lightPos2(lightPosFl2[0], lightPosFl2[1], lightPosFl2[2]);
+        light.updatePos();
+        light2.updatePos();
+
+
         CalculateDeltaTime();
         processInput(window);
 
@@ -331,18 +327,18 @@ int main()
         BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
 
 
-        BaseLitShader.set3Float("lightColor", lightColor[0], lightColor[1], lightColor[2]);
+        BaseLitShader.set3Float("lightColor", light.color[0], light.color[1], light.color[2]);
         BaseLitShader.set3Float("viewPos", camera.Position.x, camera.Position.y, camera.Position.z);
-        BaseLitShader.set3Float("lightPos", lightPos.x, lightPos.y, lightPos.z);
-        BaseLitShader.setFloat("spreadStrength", spreadStrength);
-        BaseLitShader.setFloat("ambientStrength", ambientStrength);
-        BaseLitShader.setFloat("lightFalloff", lightFalloff);
+        BaseLitShader.set3Float("lightPos", light.pos.x, light.pos.y, light.pos.z);
+        BaseLitShader.setFloat("spreadStrength", light.spreadStrength);
+        BaseLitShader.setFloat("ambientStrength", light.ambientStrength);
+        BaseLitShader.setFloat("lightFalloff", light.falloff);
 
-        BaseLitShader.set3Float("lightColor2", lightColor2[0], lightColor2[1], lightColor2[2]);
-        BaseLitShader.set3Float("lightPos2", lightPos2.x, lightPos2.y, lightPos2.z);
-        BaseLitShader.setFloat("spreadStrength2", spreadStrength2);
-        BaseLitShader.setFloat("ambientStrength2", ambientStrength2);
-        BaseLitShader.setFloat("lightFalloff2", lightFalloff2);
+        BaseLitShader.set3Float("lightColor2", light2.color[0], light2.color[1], light2.color[2]);
+        BaseLitShader.set3Float("lightPos2", light2.pos.x, light2.pos.y, light2.pos.z);
+        BaseLitShader.setFloat("spreadStrength2", light2.spreadStrength);
+        BaseLitShader.setFloat("ambientStrength2", light2.ambientStrength);
+        BaseLitShader.setFloat("lightFalloff2", light2.falloff);
 
 
         BaseLitShader.setMatrix4("view", view);
@@ -364,11 +360,11 @@ int main()
         // Light cube
         //-------------------------------------------------------------
         model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
+        model = glm::translate(model, light.pos);
         model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
 
         BaseUnlitShader.setMatrix4("model", model);
-        BaseUnlitShader.set3Float("lightColor", lightColor[0], lightColor[1], lightColor[2]);
+        BaseUnlitShader.set3Float("lightColor", light.color[0], light.color[1], light.color[2]);
         BaseUnlitShader.setMatrix4("view", view);
         BaseUnlitShader.setMatrix4("projection", projection);
 
@@ -379,11 +375,11 @@ int main()
         // Light cube 2
         //-------------------------------------------------------------
         model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos2);
+        model = glm::translate(model, light2.pos);
         model = glm::scale(model, glm::vec3(0.3, 0.3, 0.3));
 
         BaseUnlitShader.setMatrix4("model", model);
-        BaseUnlitShader.set3Float("lightColor", lightColor2[0], lightColor2[1], lightColor2[2]);
+        BaseUnlitShader.set3Float("lightColor", light2.color[0], light2.color[1], light2.color[2]);
 
         if (drawCube)
             glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
@@ -409,21 +405,8 @@ int main()
         ImGui::SliderFloat("cube speed", &cubeSpeed, 0, 10);
         ImGui::End();
 
-        ImGui::Begin("Light1 parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-        ImGui::ColorPicker4("light color", lightColor);
-        ImGui::SliderFloat3("light move", lightPosFl, -2, 2);
-        ImGui::SliderFloat("ambient strength", &ambientStrength, 0, 2);
-        ImGui::SliderFloat("spread strength", &spreadStrength, 0, 2);
-        ImGui::SliderFloat("light falloff", &lightFalloff, 0, 5);
-        ImGui::End();
-
-        ImGui::Begin("Light2 parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-        ImGui::ColorPicker4("light color", lightColor2);
-        ImGui::SliderFloat3("light move", lightPosFl2, -2, 2);
-        ImGui::SliderFloat("ambient strength", &ambientStrength2, 0, 2);
-        ImGui::SliderFloat("spread strength", &spreadStrength2, 0, 2);
-        ImGui::SliderFloat("light falloff", &lightFalloff2, 0, 5);
-        ImGui::End();
+        light.updateUi(cursorIsUnfocused);
+        light2.updateUi(cursorIsUnfocused);
 
         ImGui::Begin("Material parameters", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
         ImGui::ColorPicker4("diffuse color", diffuse);
