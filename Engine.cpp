@@ -280,13 +280,15 @@ int main()
     float specularColor[3] = { 1.0f, 0.3f, 0.7f };
     float smoothness = 32;
 
-    std::vector<OmniLight> lights(10);
 
+    std::vector<OmniLight> lights(0);
     //-------------------------------------------------------------
     // Frame Loop
     //-------------------------------------------------------------
     while (!glfwWindowShouldClose(window))
     {
+
+
 
         CalculateDeltaTime();
         processInput(window);
@@ -312,6 +314,11 @@ int main()
         projection = glm::perspective(glm::radians(camera.Zoom), screenWidth / screenHeight, 0.1f, 100.0f);
         glm::mat4 model = glm::mat4(1.0f);
 
+
+
+        //-------------------------------------------------------------
+        // Lights
+        //-------------------------------------------------------------
         BaseUnlitShader.use();
         BaseUnlitShader.setMatrix4("view", view);
         BaseUnlitShader.setMatrix4("projection", projection);
@@ -347,7 +354,7 @@ int main()
 
 
         //-------------------------------------------------------------
-        // First cube
+        // Cube
         //-------------------------------------------------------------
         glBindVertexArray(cubeVAO);
 
@@ -357,13 +364,9 @@ int main()
         BaseLitShader.setMatrix4("view", view);
         BaseLitShader.setMatrix4("projection", projection);
 
-
         BaseLitShader.set3Float("inMaterial.diffuse", diffuse[0], diffuse[1], diffuse[2]);
         BaseLitShader.set3Float("inMaterial.specular", specularColor[0], specularColor[1], specularColor[2]);
         BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
-
-
-
 
         model = glm::mat4(1.0f);
         model = glm::rotate(model, sin((float)glfwGetTime()) * cubeSpeed, glm::vec3(1.0f, 0.3f, 0.5f));
@@ -374,6 +377,23 @@ int main()
         if (drawCube)
             glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
+
+
+        //-------------------------------------------------------------
+        // Clear the light data
+        //-------------------------------------------------------------
+        i = 0;
+        for (auto& light : lights)
+        {
+            i++;
+            BaseLitShader.use();
+
+            BaseLitShader.set3Float(("inLight[" + std::to_string(i) + "].lightColor").c_str(), 0, 0, 0);
+            BaseLitShader.set3Float(("inLight[" + std::to_string(i) + "].lightPos").c_str(), 0, 0, 0);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].spreadStrength").c_str(), 0);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].ambientStrength").c_str(), 0);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].lightFalloff").c_str(), 0);
+        }
 
 
         
@@ -401,11 +421,18 @@ int main()
         ImGui::SliderFloat("smoothness", &smoothness, 0, 100);
         ImGui::End();
 
+        ImGui::Begin("Object manager", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
+        if (ImGui::Button("add light")) {
+            lights.push_back(OmniLight());
+        }
+        if (ImGui::Button("remove light") && lights.size() > 0) {
+            lights.pop_back();
+        }
+        ImGui::End();
+
         ImGui::Begin("Monitor", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
         int fps = GetFps();
         ImGui::Text("FPS: %d", fps);
-
-
         ImGui::End();
 
         ImGui::Render();

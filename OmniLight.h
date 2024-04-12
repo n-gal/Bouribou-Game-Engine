@@ -27,7 +27,7 @@
 // Nice to haves/todo later:
 // - integrated light mesh
 // - integrated unlit shader assigning
-// - automatic GUI                                                                          DONE - BUT NEED AN ID
+// - automatic GUI                                                                          DONE!
 // - separation between .h and .cpp
 // 
 //---------------------------------------------------------------------------------------------------------------------
@@ -45,13 +45,34 @@ public:
     const char* windowName;
 
 
-    OmniLight() : color{1,1,1}, ambientStrength(0.0f), spreadStrength(0.0f), falloff(1.0f), pos(0.0f), posFl{ 1.0f, 1.0f, 1.0f }
+    OmniLight() : color{randomFloat(0,1),randomFloat(0,1),randomFloat(0,1) }, ambientStrength(0.0f), spreadStrength(0.0f), falloff(1.0f), pos(0.0f), posFl{randomFloat(-2,2), randomFloat(-2,2), randomFloat(-2,2)}
     {
+
     }
 
     void updatePos()
     {
         pos = glm::vec3(posFl[0], posFl[1], posFl[2]);
+    }
+
+    float randomFloat(float min, float max) {
+        bool isNegative = false;
+        float newMin = min;
+        if (min < 0)
+        {
+            max += std::abs(min);
+            newMin = 0;
+            isNegative = true;
+        }
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<float> dis(newMin, max);
+        float result = dis(gen);
+        if (isNegative)
+        {
+            result += min;
+        }
+        return  result;
     }
 
     void updateUi(bool cursorIsUnfocused)

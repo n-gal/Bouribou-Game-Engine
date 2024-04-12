@@ -1,7 +1,7 @@
 #version 330 core
 out vec4 FragColor;
 
-#define MAX_LIGHTS 20
+#define MAX_LIGHTS 100
 
 struct material {
     vec3 diffuse;
