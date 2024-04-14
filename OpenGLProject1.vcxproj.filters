@@ -148,5 +148,11 @@
     <None Include="Shaders\BaseUnlitVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
+    <None Include="Shaders\BaseSkyboxFragmentShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="Shaders\BaseSkyboxVertexShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
   </ItemGroup>
 </Project>
