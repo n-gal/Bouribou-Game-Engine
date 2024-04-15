@@ -118,24 +118,6 @@
     <None Include="Shaders\BaseVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
-    <None Include="Shaders\DefinedColorFragmentShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </None>
-    <None Include="Shaders\DefinedColorVertexShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </None>
-    <None Include="Shaders\MovingFragmentShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </None>
-    <None Include="Shaders\MovingVertexShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </None>
-    <None Include="Shaders\VertexColorFragmentShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </None>
-    <None Include="Shaders\VertexColorVertexShader.glsl">
-      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
-    </None>
     <None Include="Shaders\BaseLitFragmentShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
@@ -152,6 +134,12 @@
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
     <None Include="Shaders\BaseSkyboxVertexShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="Shaders\BaseReflectiveFragmentShader.glsl">
+      <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
+    </None>
+    <None Include="Shaders\BaseReflectiveVertexShader.glsl">
       <Filter>Fichiers sources\Shaders\Shader Sources</Filter>
     </None>
   </ItemGroup>

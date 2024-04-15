@@ -179,6 +179,8 @@
     <None Include="Shaders\BaseFragmentShader.glsl" />
     <None Include="Shaders\BaseLitFragmentShader.glsl" />
     <None Include="Shaders\BaseLitVertexShader.glsl" />
+    <None Include="Shaders\BaseReflectiveFragmentShader.glsl" />
+    <None Include="Shaders\BaseReflectiveVertexShader.glsl" />
     <None Include="Shaders\BaseSkyboxFragmentShader.glsl" />
     <None Include="Shaders\BaseSkyboxVertexShader.glsl" />
     <None Include="Shaders\BaseTexturedFragmentShader.glsl" />
@@ -186,12 +188,6 @@
     <None Include="Shaders\BaseUnlitFragmentShader.glsl" />
     <None Include="Shaders\BaseUnlitVertexShader.glsl" />
     <None Include="Shaders\BaseVertexShader.glsl" />
-    <None Include="Shaders\DefinedColorFragmentShader.glsl" />
-    <None Include="Shaders\DefinedColorVertexShader.glsl" />
-    <None Include="Shaders\MovingFragmentShader.glsl" />
-    <None Include="Shaders\MovingVertexShader.glsl" />
-    <None Include="Shaders\VertexColorFragmentShader.glsl" />
-    <None Include="Shaders\VertexColorVertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
