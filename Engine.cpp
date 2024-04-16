@@ -179,8 +179,11 @@ int main()
     //-------------------------------------------------------------
     stbi_set_flip_vertically_on_load(true);
 
-    unsigned int diffuseMap = loadTexture("Textures/container2.png");
-    unsigned int specularMap = loadTexture("Textures/container2_specular.png");
+    unsigned int roadDiffuseMap = loadTexture("Textures/TCom_Pavement_RoadWet_BrokenLineWhite_512_diffuse.png");
+    unsigned int roadSpecularMap = loadTexture("Textures/test2.png");
+
+    unsigned int crateDiffuseMap = loadTexture("Textures/container2.png");
+    unsigned int crateSpecularMap = loadTexture("Textures/container2_specular.png");
 
     //-------------------------------------------------------------
     // Set up texture data for skybox cubemap
@@ -284,6 +287,7 @@ int main()
     glEnableVertexAttribArray(2);
 
 
+
     //-------------------------------------------------------------
     // Create the shaders
     //-------------------------------------------------------------
@@ -351,7 +355,15 @@ int main()
         ImGui::NewFrame();
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        glBindTexture(GL_TEXTURE_2D, roadDiffuseMap);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, roadSpecularMap);
+
+
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, crateDiffuseMap);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, crateSpecularMap);
 
 
 
@@ -413,7 +425,7 @@ int main()
 
 
         //-------------------------------------------------------------
-        // Cube
+        // Road
         //-------------------------------------------------------------
         glBindVertexArray(cubeVAO);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
@@ -426,15 +438,43 @@ int main()
 
         BaseLitShader.setInt("inMaterial.diffuse", 0);
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, specularMap);
-
         BaseLitShader.setInt("inMaterial.specular", 1);
         BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
         BaseLitShader.setFloat("inMaterial.reflectivity", reflectivity);
 
         model = glm::mat4(1.0f);
         model = glm::rotate(model, sin((float)glfwGetTime()) * cubeSpeed, glm::vec3(1.0f, 0.3f, 0.5f));
+        model = glm::scale(model, glm::vec3(8, 1, 4));
+
+        BaseLitShader.setMatrix4("model", model);
+
+
+
+        if (drawCube)
+            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+
+
+        //-------------------------------------------------------------
+        // Crate
+        //-------------------------------------------------------------
+        glBindVertexArray(cubeVAO);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+
+        BaseLitShader.use();
+
+        BaseLitShader.setInt("inMaterial.diffuse", 2);
+
+        BaseLitShader.setInt("inMaterial.specular", 3);
+        BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
+        BaseLitShader.setFloat("inMaterial.reflectivity", reflectivity);
+
+        model = glm::mat4(1.0f);
+        model = glm::rotate(model, sin((float)glfwGetTime()) * cubeSpeed, glm::vec3(1.0f, 0.3f, 0.5f));
+
+        model = glm::scale(model, glm::vec3(1, 1, 1));
+        model = glm::translate(model, glm::vec3(1, 1, 1));
+
         BaseLitShader.setMatrix4("model", model);
 
 
@@ -786,7 +826,7 @@ unsigned int loadTexture(char const* path)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         stbi_image_free(data);
     }
