@@ -24,9 +24,15 @@ uniform vec3 viewPos;
 
 uniform material inMaterial;
 
+uniform samplerCube skybox;
+
+
+
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoord;
+
+float fresnelSchlick(float cosTheta, float refIndex);
 
 void main()
 {
@@ -37,6 +43,16 @@ void main()
 
     vec3 diffuseTexture = vec3(texture(inMaterial.diffuse, TexCoord));
     vec3 specularTexture = vec3(texture(inMaterial.specular, TexCoord));
+
+    vec3 viewDir = normalize(viewPos - FragPos);
+
+    float cosTheta = dot(viewDir, normalize(Normal)); // cosine of the angle
+
+    float fres = fresnelSchlick(cosTheta, 1);
+
+    // cubemapped reflections
+    vec3 I = normalize(FragPos - viewPos);
+    vec3 R = reflect(I, normalize(Normal));
 
     for (int i = 0; i < numLights; ++i)
     {
@@ -52,10 +68,12 @@ void main()
         vec3 diffuse = diff * inLight[i].lightColor;
 
         // specular lighting
-        vec3 viewDir = normalize(viewPos - FragPos);
         vec3 reflectDir = reflect(-lightDir, norm);
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), inMaterial.smoothness);
         vec3 specular = specularTexture * (spec*3) * inLight[i].lightColor;
+
+        // fresnel term in specular lighting, physically based but less cool lookng :(
+        //specular = specular * fres;
 
         // light attenuation
         float lightDistance = distance(FragPos, inLight[i].lightPos);
@@ -63,7 +81,18 @@ void main()
 
         // result
         result = result + (ambient + ((((spread + diffuse + specular) * diffuseTexture)) * attenuation));
+
+
     }
 
-    FragColor = vec4(result, 1.0);
+    vec4 reflectiveResult = (vec4(texture(skybox, R).rgb, 1.0) * vec4(specularTexture, 1)) * fres;
+
+    FragColor = vec4(result, 1.0) + reflectiveResult;
+}
+
+float fresnelSchlick(float cosTheta, float refIndex)
+{
+    float r0 = (1.0 - refIndex) / (1.0 + refIndex);
+    r0 = r0 * r0;
+    return r0 + (1.0 - r0) * pow(1.0 - cosTheta, 5.0);
 }

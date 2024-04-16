@@ -354,15 +354,15 @@ int main()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, roadDiffuseMap);
         glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, roadDiffuseMap);
+        glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, roadSpecularMap);
 
 
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, crateDiffuseMap);
         glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, crateDiffuseMap);
+        glActiveTexture(GL_TEXTURE4);
         glBindTexture(GL_TEXTURE_2D, crateSpecularMap);
 
 
@@ -436,9 +436,9 @@ int main()
         BaseLitShader.setMatrix4("view", view);
         BaseLitShader.setMatrix4("projection", projection);
 
-        BaseLitShader.setInt("inMaterial.diffuse", 0);
-
-        BaseLitShader.setInt("inMaterial.specular", 1);
+        BaseLitShader.setInt("skybox", 0);
+        BaseLitShader.setInt("inMaterial.diffuse", 1);
+        BaseLitShader.setInt("inMaterial.specular", 2);
         BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
         BaseLitShader.setFloat("inMaterial.reflectivity", reflectivity);
 
@@ -458,14 +458,11 @@ int main()
         //-------------------------------------------------------------
         // Crate
         //-------------------------------------------------------------
-        glBindVertexArray(cubeVAO);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 
         BaseLitShader.use();
 
-        BaseLitShader.setInt("inMaterial.diffuse", 2);
-
-        BaseLitShader.setInt("inMaterial.specular", 3);
+        BaseLitShader.setInt("inMaterial.diffuse", 3);
+        BaseLitShader.setInt("inMaterial.specular", 4);
         BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
         BaseLitShader.setFloat("inMaterial.reflectivity", reflectivity);
 
