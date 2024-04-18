@@ -12,7 +12,7 @@
 #include "Shader.h"
 #include "stb_image.h"
 #include "camera.h"
-#include "OmniLight.h"
+#include "Light.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -88,7 +88,7 @@ int main()
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwMakeContextCurrent(window);
-    //glfwSwapInterval(0); - disables vsync
+    glfwSwapInterval(0);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -328,11 +328,11 @@ int main()
     float diffuse[3] = { 1.0f, 1.0f, 1.0f };
     float specularColor[3] = { 1.0f, 1.0f, 1.0f };
     float smoothness = 32;
+    float roughness = 0;
 
     float reflectivity = 0.5f;
 
-    std::vector<OmniLight> lights(0);
-
+    std::vector<Light> lights(0);
 
 
     //-------------------------------------------------------------
@@ -340,8 +340,6 @@ int main()
     //-------------------------------------------------------------
     while (!glfwWindowShouldClose(window))
     {
-
-
 
         CalculateDeltaTime();
         processInput(window);
@@ -403,24 +401,19 @@ int main()
             light.ID = i;
             light.updatePos();
             light.updateUi(cursorIsUnfocused);
-            /*
-            BaseReflectiveShader.use();
 
-            BaseReflectiveShader.set3Float(("inLight[" + std::to_string(i) + "].lightColor").c_str(), light.color[0], light.color[1], light.color[2]);
-            BaseReflectiveShader.set3Float(("inLight[" + std::to_string(i) + "].lightPos").c_str(), light.pos.x, light.pos.y, light.pos.z);
-            BaseReflectiveShader.setFloat(("inLight[" + std::to_string(i) + "].spreadStrength").c_str(), light.spreadStrength);
-            BaseReflectiveShader.setFloat(("inLight[" + std::to_string(i) + "].ambientStrength").c_str(), light.ambientStrength);
-            BaseReflectiveShader.setFloat(("inLight[" + std::to_string(i) + "].lightFalloff").c_str(), light.falloff);
-            */   
-   
             BaseLitShader.use();
 
             BaseLitShader.set3Float(("inLight[" + std::to_string(i) + "].lightColor").c_str(), light.color[0], light.color[1], light.color[2]);
             BaseLitShader.set3Float(("inLight[" + std::to_string(i) + "].lightPos").c_str(), light.pos.x, light.pos.y, light.pos.z);
+            BaseLitShader.set3Float(("inLight[" + std::to_string(i) + "].direction").c_str(), light.dir.x, light.dir.y, light.dir.z);
             BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].spreadStrength").c_str(), light.spreadStrength);
             BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].ambientStrength").c_str(), light.ambientStrength);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].cutOff").c_str(), light.cutOff);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].intensity").c_str(), light.intensity);
+            BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].outerCutOff").c_str(), light.outerCutOff);
             BaseLitShader.setFloat(("inLight[" + std::to_string(i) + "].lightFalloff").c_str(), light.falloff);
-
+            BaseLitShader.setInt(("inLight[" + std::to_string(i) + "].type").c_str(), light.type);
         }
 
 
@@ -440,6 +433,7 @@ int main()
         BaseLitShader.setInt("inMaterial.diffuse", 1);
         BaseLitShader.setInt("inMaterial.specular", 2);
         BaseLitShader.setFloat("inMaterial.smoothness", smoothness);
+        BaseLitShader.setFloat("inMaterial.roughness", roughness);
         BaseLitShader.setFloat("inMaterial.reflectivity", reflectivity);
 
         model = glm::mat4(1.0f);
@@ -557,12 +551,21 @@ int main()
         ImGui::ColorPicker4("diffuse color", diffuse);
         ImGui::ColorPicker4("specular color", specularColor);
         ImGui::SliderFloat("smoothness", &smoothness, 0, 500);
+        ImGui::SliderFloat("roughness", &roughness, 0, 8);
         ImGui::SliderFloat("reflectivty", &reflectivity, 0, 1);
         ImGui::End();
 
         ImGui::Begin("Object manager", nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
-        if (ImGui::Button("add light")) {
-            lights.push_back(OmniLight());
+        if (ImGui::Button("add enviro light")) {
+            lights.push_back(Light());
+            lights.back().type = 1;
+        }
+        if (ImGui::Button("add spotlight")) {
+            lights.push_back(Light());
+            lights.back().type = 2;
+        }
+        if (ImGui::Button("add point light")) {
+            lights.push_back(Light());
         }
         if (ImGui::Button("remove light") && lights.size() > 0) {
             lights.pop_back();
@@ -782,6 +785,7 @@ unsigned int loadCubemap(std::vector<std::string> faces)
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
                 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
             );
+            glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
             stbi_image_free(data);
         }
         else
@@ -790,7 +794,7 @@ unsigned int loadCubemap(std::vector<std::string> faces)
             stbi_image_free(data);
         }
     }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

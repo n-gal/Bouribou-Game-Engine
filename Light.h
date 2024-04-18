@@ -32,7 +32,7 @@
 // 
 //---------------------------------------------------------------------------------------------------------------------
 
-class OmniLight
+class Light
 {
 public:
     float color[3];
@@ -43,16 +43,29 @@ public:
     float posFl[3];
     unsigned int ID;
     const char* windowName;
+    int type;
+    glm::vec3 dir;
+    float dirFl[2];
+    float cutOff;
+    float outerCutOff;
+    float intensity;
 
 
-    OmniLight() : color{randomFloat(0,1),randomFloat(0,1),randomFloat(0,1) }, ambientStrength(0.0f), spreadStrength(0.0f), falloff(1.0f), pos(0.0f), posFl{randomFloat(-2,2), randomFloat(-2,2), randomFloat(-2,2)}
+    Light() : color{ randomFloat(0,1),randomFloat(0,1),randomFloat(0,1) }, intensity(1), ambientStrength(0.0f), spreadStrength(0.0f), falloff(1.0f), pos(0.0f), dir(0.0f), dirFl{0,0}, posFl{ randomFloat(-2,2), randomFloat(-2,2), randomFloat(-2,2) }
     {
-
+        type = 0;
     }
 
     void updatePos()
     {
         pos = glm::vec3(posFl[0], posFl[1], posFl[2]);
+
+        float azimuth = glm::radians(dirFl[0]);
+        float elevation = glm::radians(dirFl[1]);
+
+        dir.x = cos(elevation) * cos(azimuth);
+        dir.y = sin(elevation);
+        dir.z = cos(elevation) * sin(azimuth);
     }
 
     float randomFloat(float min, float max) {
@@ -81,7 +94,18 @@ public:
         windowName = temp.c_str();
         ImGui::Begin(windowName, nullptr, !cursorIsUnfocused ? ImGuiWindowFlags_NoInputs : 0);
         ImGui::ColorPicker4("light color", color);
+        ImGui::InputInt("light type", &type);
         ImGui::SliderFloat3("light move", posFl, -2, 2);
+        if (type == 1 || type == 2)
+            ImGui::SliderFloat2("light rotate", dirFl, -180, 180);
+
+        if (type == 2)
+        {
+            ImGui::SliderFloat("inner cutoff", &cutOff, 0, 1);
+            ImGui::SliderFloat("outer cutoff", &outerCutOff, 0, 1);
+        }
+
+        ImGui::SliderFloat("intensity", &intensity, 0, 50);
         ImGui::SliderFloat("ambient strength", &ambientStrength, 0, 2);
         ImGui::SliderFloat("spread strength", &spreadStrength, 0, 2);
         ImGui::SliderFloat("light falloff", &falloff, 0, 5);
